@@ -1,0 +1,56 @@
+---
+title: "SAGEII_Eye_Tracking"
+author: "Xi Yang"
+date: "1/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(devtools)
+library(tidyverse)
+library(rio)
+library(here)
+theme_set(theme_minimal(base_size = 20))
+```
+
+```{r}
+install_github("tz-lom/eyelinkReader")
+library(eyelinkReader)
+edf_open_file(here("data", "147_RewardGuessingTask_Visit2_Edited_eyetracking_2018_May_08_1219.edf"))
+
+```
+
+
+
+
+```{r hedderik/EDF2R}
+install_github("hedderik/EDF2R")
+
+readEDF <- function(name, checkConsistency=FALSE) {
+    retVal <- NULL
+    if (file.exists(name)) {
+      retVal <- parseEDF(name);
+
+      ## Convert factors to strings:
+      retVal$events$msg <- as.character(retVal$events$msg)
+      ## Remove empty events:
+      retVal$events <- retVal$events[retVal$events$msg != "",]
+    } else {
+        warning(paste0("Specified file (",name,") not found."))
+    }
+    return(retVal)
+}
+
+parseEDF <- function(fname) {
+    .Call('EDF2R_parseEDF', PACKAGE = 'EDF2R', fname)
+}
+
+parseEDF(readEDF)
+(here("data", "147_RewardGuessingTask_Visit2_Edited_eyetracking_2018_May_08_1219.edf")))
+
+d <- import(here("data", "147_RewardGuessingTask_Visit2_Edited_eyetracking_2018_May_08_1219.edf"),
+            setclass = "tbl_df")
+
+```
+
